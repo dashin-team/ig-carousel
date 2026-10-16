@@ -1,7 +1,7 @@
 <!DOCTYPE html><html lang="zh-Hant"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>IG 輪播圖生成器</title>
 <style>
-:root{--f:'Noto Sans TC','PingFang TC','Microsoft JhengHei','Noto Sans CJK TC',sans-serif}
+:root{--fs:1;--f:'Noto Sans TC','PingFang TC','Microsoft JhengHei','Noto Sans CJK TC',sans-serif}
 *{box-sizing:border-box}body{margin:0;font-family:var(--f);background:#15151a;color:#eee}
 header{padding:14px 18px;background:#0c0c10;border-bottom:1px solid #333}header h1{margin:0;font-size:20px}
 .wrap{display:flex;gap:18px;padding:16px;flex-wrap:wrap}.panel{flex:1 1 340px;max-width:460px}.out{flex:3 1 500px}
@@ -15,11 +15,11 @@ button.g{background:#333}.row{display:flex;gap:6px;flex-wrap:wrap;align-items:ce
 .tools{max-width:324px;display:flex;gap:4px;flex-wrap:wrap;margin-top:6px}.tools button{padding:6px 8px;font-size:12px;margin:0}
 .slide{width:1080px;height:1350px;position:relative;overflow:hidden;font-family:var(--f);display:flex;flex-direction:column;justify-content:center;padding:110px 100px 150px}
 .slide .bg{position:absolute;inset:0;background-size:cover;background-position:center}.slide .ov{position:absolute;inset:0;background:rgba(0,0,0,.55)}
-.slide .c{position:relative;z-index:2}.slide .t{font-size:84px;font-weight:900;line-height:1.25;margin:0 0 50px;word-break:break-word}
-.slide .b{font-size:46px;line-height:1.7;white-space:pre-wrap;word-break:break-word}.slide.cover .t{font-size:110px}.slide.cover .b{font-size:52px;opacity:.85}
-.slide .tag{font-size:34px;letter-spacing:6px;margin-bottom:30px;opacity:.7}
-.slide .ft{position:absolute;z-index:2;left:100px;right:100px;bottom:60px;display:flex;justify-content:space-between;font-size:32px;opacity:.75}
-.slide.cta .c{text-align:center}.slide.cta .t{font-size:96px}
+.slide .c{position:relative;z-index:2}.slide .t{font-size:calc(67px*var(--fs,1));font-weight:900;line-height:1.25;margin:0 0 50px;word-break:break-word}
+.slide .b{font-size:calc(37px*var(--fs,1));line-height:1.7;white-space:pre-wrap;word-break:break-word}.slide.cover .t{font-size:calc(88px*var(--fs,1))}.slide.cover .b{font-size:calc(42px*var(--fs,1));opacity:.85}
+.slide .tag{font-size:calc(27px*var(--fs,1));letter-spacing:6px;margin-bottom:30px;opacity:.7}
+.slide .ft{position:absolute;z-index:2;left:100px;right:100px;bottom:60px;display:flex;justify-content:space-between;font-size:calc(26px*var(--fs,1));opacity:.75}
+.slide.cta .c{text-align:center}.slide.cta .t{font-size:calc(77px*var(--fs,1))}
 [contenteditable]:focus{outline:2px dashed rgba(255,95,162,.7)}
 .dark{background:#000;color:#fff}.dark .t{background:linear-gradient(90deg,#ff2d2d,#ff6fb5);-webkit-background-clip:text;background-clip:text;color:transparent}
 .warm{background:#f7efe3;color:#4a3a2c}.warm .t{color:#c0532b}.warm .tag{color:#c0532b}
@@ -44,60 +44,61 @@ button.g{background:#333}.row{display:flex;gap:6px;flex-wrap:wrap;align-items:ce
 .list .t{font-weight:900;color:var(--tx);letter-spacing:2px}
 .list .gd{color:var(--gd)}
 .list .ft{font-family:inherit;color:var(--sg);opacity:.9;letter-spacing:3px}
-.list .ltag{display:inline-block;border:2px solid var(--sg);color:var(--sg);font-size:30px;letter-spacing:12px;padding:10px 26px;margin-bottom:40px;font-weight:700}
-.list .qm{font-size:260px;line-height:.8;color:var(--sg);font-weight:900;height:150px}
-.list.lcover .t{font-size:100px;line-height:1.3;margin:0 0 50px}
-.list .vbar{border-left:12px solid var(--sg);padding-left:36px;font-size:46px;line-height:1.6;color:var(--tx2)}
-.list .lt{font-size:78px;line-height:1.3;margin-bottom:50px}
-.list .callout{border:4px solid var(--sg);padding:50px 54px;font-size:46px;line-height:1.75;background:var(--cb,rgba(255,255,255,.05));white-space:pre-wrap}
+.list .ltag{display:inline-block;border:2px solid var(--sg);color:var(--sg);font-size:calc(24px*var(--fs,1));letter-spacing:12px;padding:10px 26px;margin-bottom:40px;font-weight:700}
+.list .qm{font-size:calc(208px*var(--fs,1));line-height:.8;color:var(--sg);font-weight:900;height:150px}
+.list.lcover .t{font-size:calc(80px*var(--fs,1));line-height:1.3;margin:0 0 50px}
+.list .vbar{border-left:12px solid var(--sg);padding-left:36px;font-size:calc(37px*var(--fs,1));line-height:1.6;color:var(--tx2)}
+.list .lt{font-size:calc(62px*var(--fs,1));line-height:1.3;margin-bottom:50px}
+.list .callout{border:4px solid var(--sg);padding:50px 54px;font-size:calc(37px*var(--fs,1));line-height:1.75;background:var(--cb,rgba(255,255,255,.05));white-space:pre-wrap}
 .list .item{display:flex;gap:40px;margin-bottom:64px}.list .item:last-child{margin-bottom:0}
-.list .num{font-size:170px;line-height:.85;color:var(--sg);font-weight:900;min-width:150px;text-align:center}
-.list .ih{font-size:58px;font-weight:900;line-height:1.3;margin-bottom:16px;color:var(--tx)}
-.list .id{font-size:38px;line-height:1.6;color:var(--tx2);margin-bottom:22px}
-.list .qb{border:3px solid var(--sg);padding:20px 28px;font-size:36px;line-height:1.5;color:var(--sg)}
+.list .num{font-size:calc(136px*var(--fs,1));line-height:.85;color:var(--sg);font-weight:900;min-width:150px;text-align:center}
+.list .ih{font-size:calc(46px*var(--fs,1));font-weight:900;line-height:1.3;margin-bottom:16px;color:var(--tx)}
+.list .id{font-size:calc(30px*var(--fs,1));line-height:1.6;color:var(--tx2);margin-bottom:22px}
+.list .qb{border:3px solid var(--sg);padding:20px 28px;font-size:calc(29px*var(--fs,1));line-height:1.5;color:var(--sg)}
 .list .qb b{color:var(--gd)}
-.list.lessay .t{font-size:76px;padding-bottom:30px;border-bottom:4px solid var(--gd);display:inline-block}
-.list .es{font-size:46px;line-height:1.9;white-space:pre-wrap;margin-top:50px}
+.list.lessay .t{font-size:calc(61px*var(--fs,1));padding-bottom:30px;border-bottom:4px solid var(--gd);display:inline-block}
+.list .es{font-size:calc(37px*var(--fs,1));line-height:1.9;white-space:pre-wrap;margin-top:50px}
 .list.lclose .c{text-align:center}.list .dv{width:180px;height:3px;background:var(--gd);margin:60px auto}
-.list.lclose .t{font-size:88px;line-height:1.45;margin:0}
-.list .sl2{font-size:48px;line-height:2;margin-bottom:50px}.list .sl2 div:before{content:'✓ ';color:var(--sg);font-weight:900}
-.list .cta{border:4px solid var(--gd);padding:40px 46px;font-size:44px;line-height:1.6;text-align:center;color:var(--tx)}
+.list.lclose .t{font-size:calc(70px*var(--fs,1));line-height:1.45;margin:0}
+.list .sl2{font-size:calc(38px*var(--fs,1));line-height:2;margin-bottom:50px}.list .sl2 div:before{content:'✓ ';color:var(--sg);font-weight:900}
+.list .cta{border:4px solid var(--gd);padding:40px 46px;font-size:calc(35px*var(--fs,1));line-height:1.6;text-align:center;color:var(--tx)}
 .list.milk,.list.bold{font-family:'Noto Sans TC','PingFang TC','Microsoft JhengHei','Noto Sans CJK TC',sans-serif}
 .milk .c{background:var(--card);border-radius:56px;padding:76px 70px;border:4px solid var(--cb)}
-.milk .qm{display:none}.milk .ltag{border:0;background:var(--cb);color:var(--tx);border-radius:999px;letter-spacing:4px;font-size:32px;padding:12px 34px}
-.milk .t{letter-spacing:1px;font-weight:900}.milk.lcover .t{font-size:92px}.milk .vbar{border:0;padding:0;font-size:44px}
+.milk .qm{display:none}.milk .ltag{border:0;background:var(--cb);color:var(--tx);border-radius:999px;letter-spacing:4px;font-size:calc(26px*var(--fs,1));padding:12px 34px}
+.milk .t{letter-spacing:1px;font-weight:900}.milk.lcover .t{font-size:calc(74px*var(--fs,1))}.milk .vbar{border:0;padding:0;font-size:calc(35px*var(--fs,1))}
 .milk .callout,.milk .qb,.milk .cta{border-radius:28px;border:0;background:var(--cb)}.milk .qb{color:var(--tx)}
-.milk .num{width:118px;min-width:118px;height:118px;border-radius:50%;background:var(--sg);color:#fff;font-size:54px;line-height:118px;font-weight:900}
-.milk .item{gap:34px;margin-bottom:48px}.milk .ih{font-size:52px}.milk .id{font-size:36px}.milk.lessay .t{border-bottom:0;background:var(--cb);border-radius:20px;padding:10px 26px}
-.milk .dv{height:10px;width:120px;border-radius:9px;background:var(--cb)}.milk.lclose .t{font-size:80px}.milk .sl2 div:before{content:'♡ ';color:var(--sg)}
+.milk .num{width:118px;min-width:118px;height:118px;border-radius:50%;background:var(--sg);color:#fff;font-size:calc(43px*var(--fs,1));line-height:118px;font-weight:900}
+.milk .item{gap:34px;margin-bottom:48px}.milk .ih{font-size:calc(42px*var(--fs,1))}.milk .id{font-size:calc(29px*var(--fs,1))}.milk.lessay .t{border-bottom:0;background:var(--cb);border-radius:20px;padding:10px 26px}
+.milk .dv{height:10px;width:120px;border-radius:9px;background:var(--cb)}.milk.lclose .t{font-size:calc(64px*var(--fs,1))}.milk .sl2 div:before{content:'♡ ';color:var(--sg)}
 .edit{padding:150px 120px 170px}.edit .t{font-weight:700;letter-spacing:4px}.edit .qm{display:none}
-.edit .ltag{border:0;border-bottom:2px solid var(--sg);padding:0 0 14px;font-size:26px;letter-spacing:14px;font-weight:400}
-.edit.lcover .t{font-size:96px;line-height:1.35}.edit .vbar{border-left:2px solid var(--sg);padding-left:32px;font-size:40px}
+.edit .ltag{border:0;border-bottom:2px solid var(--sg);padding:0 0 14px;font-size:calc(21px*var(--fs,1));letter-spacing:14px;font-weight:400}
+.edit.lcover .t{font-size:calc(77px*var(--fs,1));line-height:1.35}.edit .vbar{border-left:2px solid var(--sg);padding-left:32px;font-size:calc(32px*var(--fs,1))}
 .edit .vbar,.edit .callout,.edit .id,.edit .es,.edit .sl2,.edit .cta{font-family:'Noto Sans TC','PingFang TC','Microsoft JhengHei',sans-serif;font-weight:300}
-.edit .lt{font-size:68px}.edit .callout{border:0;border-top:2px solid var(--sg);border-bottom:2px solid var(--sg);padding:46px 0;background:none;font-size:42px}
-.edit .num{font-size:110px;font-weight:300;min-width:130px;border-right:1px solid var(--tx2);padding-right:30px}
-.edit .item{gap:40px;margin-bottom:70px}.edit .ih{font-size:50px;font-weight:700}.edit .id{font-size:35px}.edit .qb{border:1px solid var(--sg);font-size:33px}
-.edit.lessay .t{font-size:66px;border-bottom:1px solid var(--sg)}.edit .es{font-size:42px}.edit .dv{height:1px;width:240px;background:var(--sg)}
-.edit.lclose .t{font-size:78px;font-weight:700}.edit .cta{border:1px solid var(--sg);font-size:40px}.edit .sl2{font-size:44px}
+.edit .lt{font-size:calc(54px*var(--fs,1))}.edit .callout{border:0;border-top:2px solid var(--sg);border-bottom:2px solid var(--sg);padding:46px 0;background:none;font-size:calc(34px*var(--fs,1))}
+.edit .num{font-size:calc(88px*var(--fs,1));font-weight:300;min-width:130px;border-right:1px solid var(--tx2);padding-right:30px}
+.edit .item{gap:40px;margin-bottom:70px}.edit .ih{font-size:calc(40px*var(--fs,1));font-weight:700}.edit .id{font-size:calc(28px*var(--fs,1))}.edit .qb{border:1px solid var(--sg);font-size:calc(26px*var(--fs,1))}
+.edit.lessay .t{font-size:calc(53px*var(--fs,1));border-bottom:1px solid var(--sg)}.edit .es{font-size:calc(34px*var(--fs,1))}.edit .dv{height:1px;width:240px;background:var(--sg)}
+.edit.lclose .t{font-size:calc(62px*var(--fs,1));font-weight:700}.edit .cta{border:1px solid var(--sg);font-size:calc(32px*var(--fs,1))}.edit .sl2{font-size:calc(35px*var(--fs,1))}
 .bold .t{font-weight:900;letter-spacing:0}.bold .qm{display:none}
-.bold .ltag{background:var(--sg);color:var(--bgc);border:0;font-weight:900;letter-spacing:6px;font-size:36px}
-.bold.lcover .t{font-size:150px;line-height:1.15}.bold .vbar{border-left:16px solid var(--sg);font-size:50px;font-weight:700}
-.bold .lt{font-size:100px}.bold .callout{border-width:6px;font-size:48px;font-weight:700}
-.bold .num{font-size:200px;letter-spacing:-8px}.bold .ih{font-size:64px}.bold .id{font-size:38px;font-weight:500}.bold .qb{border-width:5px;font-size:38px;font-weight:700}
-.bold.lessay .t{font-size:104px;border-bottom:10px solid var(--gd)}.bold .es{font-size:48px;font-weight:500}
-.bold.lclose .t{font-size:120px;line-height:1.3}.bold .dv{height:12px;width:200px}.bold .cta{border-width:6px;font-weight:900;font-size:46px}.bold .sl2{font-size:54px;font-weight:700}
+.bold .ltag{background:var(--sg);color:var(--bgc);border:0;font-weight:900;letter-spacing:6px;font-size:calc(27px*var(--fs,1))}
+.bold.lcover .t{font-size:calc(112px*var(--fs,1));line-height:1.15}.bold .vbar{border-left:16px solid var(--sg);font-size:calc(38px*var(--fs,1));font-weight:700}
+.bold .lt{font-size:calc(75px*var(--fs,1))}.bold .callout{border-width:6px;font-size:calc(36px*var(--fs,1));font-weight:700}
+.bold .num{font-size:calc(150px*var(--fs,1));letter-spacing:-8px}.bold .ih{font-size:calc(48px*var(--fs,1))}.bold .id{font-size:calc(28px*var(--fs,1));font-weight:500}.bold .qb{border-width:5px;font-size:calc(28px*var(--fs,1));font-weight:700}
+.bold.lessay .t{font-size:calc(78px*var(--fs,1));border-bottom:10px solid var(--gd)}.bold .es{font-size:calc(36px*var(--fs,1));font-weight:500}
+.bold.lclose .t{font-size:calc(90px*var(--fs,1));line-height:1.3}.bold .dv{height:12px;width:200px}.bold .cta{border-width:6px;font-weight:900;font-size:calc(34px*var(--fs,1))}.bold .sl2{font-size:calc(40px*var(--fs,1));font-weight:700}
 .gpt{margin-top:14px;background:#1e1e24;border-radius:10px;padding:8px 12px}.gpt summary{cursor:pointer;font-weight:700;padding:4px 0}
 .gp{margin:10px 0;border-top:1px solid #333;padding-top:8px}.gp b{font-size:14px}.gp pre{white-space:pre-wrap;font:12px/1.6 var(--f);background:#15151a;padding:8px;border-radius:6px;max-height:140px;overflow:auto;color:#ccc}.gp button{padding:6px 10px;font-size:12px}</style></head><body>
 <header><h1>📸 IG 輪播圖生成器</h1></header>
 <div class="wrap"><div class="panel">
 <label>貼上 AI 文案（空行或「1.」「第1張」「---」分隔；每段第一行為標題）</label>
 <textarea id="src"></textarea>
-<label>模板</label><select id="tpl"><option value="dark">暗黑模式（紅粉漸層）</option><option value="warm">溫暖淺色</option><option value="navy">海軍藍金（保險專業）</option><option value="mini">極簡白</option><option value="list">綠金清單（THE LIST）</option><option value="milk">奶茶溫馨風</option><option value="edit">簡約質感風</option><option value="bold">高對比亮眼風</option></select>
+<label>模板</label><select id="tpl"><option value="dark">暗黑模式（紅粉漸層）</option><option value="warm">溫暖淺色</option><option value="navy">海軍藍金（保險專業）</option><option value="mini">極簡白</option><option value="milk">奶茶溫馨風</option><option value="edit">簡約質感風</option><option value="bold">高對比亮眼風</option></select>
 <div id="varRow" style="display:none"><label>樣式變化</label><select id="variant"></select></div><div id="schemeRow"><label>配色（綠金清單）</label><select id="scheme"><option value="0">灰綠配金</option><option value="1">深藍配金</option><option value="2">酒紅配米</option><option value="3">墨黑配橘</option><option value="4">咖啡配奶茶</option><option value="5">紫配粉</option><option value="c">自訂…</option></select>
 <div id="custom" class="row" style="display:none;font-size:13px;color:#bbb;margin-top:6px">主色 <input type="color" id="cAcc" value="#9BC59D"> 強調色 <input type="color" id="cHl" value="#D9B76A"></div></div>
+<label>字體大小 <span id="fsv">100%</span></label><input type="range" id="fs" min="0.7" max="1.3" step="0.05" value="1" style="width:100%">
 <label>頁尾帳號</label><input type="text" id="handle" value="梁仕翰｜富邦人壽">
 <label><input type="checkbox" id="pg" checked> 顯示頁碼</label>
-<div class="row"><button id="gen">✨ 生成輪播圖</button><button class="g" id="igbtn">📱 IG預覽</button><button class="g" id="zip">⬇ 全部下載 ZIP</button><button class="g" id="ldtpl">📝 載入文字範本</button><button class="g" id="ldlist">📋 綠金清單範例</button></div>
+<div class="row"><button id="gen">✨ 生成輪播圖</button><button class="g" id="igbtn">📱 IG預覽</button><button class="g" id="zip">⬇ 全部下載 ZIP</button><button class="g" id="ldtpl">📝 載入文字範本</button><button class="g" id="ldlist">📋 範例：買保險前先問八個問題</button></div>
 <div id="msg"></div>
 <details class="gpt" id="gpt"><summary>🤖 GPT 指令（複製貼到 ChatGPT）</summary><div id="gpl"></div></details>
 <p style="font-size:12px;color:#888">提示：點投影片文字可直接編輯；可拖曳圖片到投影片當背景。</p>
@@ -315,7 +316,7 @@ $('#gen').onclick=()=>{slides=parse($('#src').value);render();msg(`已生成 ${s
 ['cAcc','cHl'].forEach(id=>$('#'+id).addEventListener('input',render));
 function syncScheme(){const st=STYLES[$('#tpl').value];$('#varRow').style.display=st&&st.v.length>1?'':'none';
   if(st){const cur=$('#variant').dataset.tp===$('#tpl').value?$('#variant').value:'0';$('#variant').innerHTML=st.v.map((x,k)=>`<option value="${k}">${x[0]}</option>`).join('');$('#variant').value=cur;$('#variant').dataset.tp=$('#tpl').value}
-  $('#schemeRow').style.display=$('#tpl').value==='list'?'':'none';$('#custom').style.display=$('#scheme').value==='c'?'flex':'none'}
+  $('#schemeRow').style.display='none';$('#custom').style.display=$('#scheme').value==='c'?'flex':'none'}
 ['tpl','scheme'].forEach(id=>$('#'+id).addEventListener('change',syncScheme));
 $('#zip').onclick=async()=>{if(!slides.length)return;const z=new JSZip();
   for(let i=0;i<slides.length;i++){msg(`輸出中 ${i+1}/${slides.length}…`);z.file(`slide-${String(i+1).padStart(2,'0')}.png`,await toBlob(await snap(i)))}
@@ -337,7 +338,8 @@ $('#gg').onclick=e=>{const d=e.target.closest('[data-k]');if(!d)return;const u=G
 $('#galclose').onclick=()=>$('#gal').style.display='none';
 const TPL9="第1張 「___，我是不是也這樣？」\n其實很多人都卡在___，這篇幫你一次看懂\n\n第2張 這篇怎麼用？\n先往下滑，找到最像你的那一項\n對照問題框誠實回答，存起來慢慢看\n\n第3張 ① ___ ／ ② ___\n① ___：一句話說明___\n👉 問問自己：___？\n② ___：一句話說明___\n👉 問問自己：___？\n\n第4張 ③ ___ ／ ④ ___\n③ ___：一句話說明___\n👉 問問自己：___？\n④ ___：一句話說明___\n👉 問問自己：___？\n\n第5張 ⑤ ___ ／ ⑥ ___\n⑤ ___：一句話說明___\n👉 問問自己：___？\n⑥ ___：一句話說明___\n👉 問問自己：___？\n\n第6張 ⑦ ___ ／ ⑧ ___\n⑦ ___：一句話說明___\n👉 問問自己：___？\n⑧ ___：一句話說明___\n👉 問問自己：___？\n\n第7張 這8點的共通點是？\n它們其實都指向同一件事：___\n差別只在於___\n\n第8張 ___，比___更重要。\n\n第9張 重點整理\n✔ ___　✔ ___　✔ ___\n想要___？留言「___」，我私訊給你 👇";
 $('#ldtpl').onclick=()=>{if($('#src').value.trim()&&$('#src').value!==SAMPLE&&!confirm('要用 9 張填空範本取代目前文字嗎？'))return;$('#src').value=TPL9;$('#gen').click();msg('已載入 9 張填空範本：把 ___ 換成你的內容後再按生成')};
-$('#ldlist').onclick=()=>{$('#src').value=SAMPLE_LIST;$('#tpl').value='list';syncScheme();$('#gen').click();msg('已載入綠金清單範例')};
+$('#ldlist').onclick=()=>{$('#src').value=SAMPLE_LIST;if(!STYLES[$('#tpl').value])$('#tpl').value='milk';syncScheme();$('#gen').click();msg('已載入範例：買保險前先問八個問題')};
+$('#fs').oninput=()=>{document.documentElement.style.setProperty('--fs',$('#fs').value);$('#fsv').textContent=Math.round($('#fs').value*100)+'%'};
 const PROMPTS=[["A｜9張清單型", "你是一位專門經營保險業務 IG 的內容策略師。我是梁仕翰，富邦人壽業務員，風格是專業、溫暖、不推銷，核心理念是「先解決客戶的問題，商品只是工具」。\n\n請幫我寫一組 9 張的 IG 輪播圖文案。\n受眾：___\n目的：___\n主題：___\n\n結構：\n第1張：封面，戳心標題（15字內）＋一句副標\n第2張：告訴讀者這篇怎麼用\n第3～6張：每張兩個重點，用①②…⑧編號，格式「① 重點：一句說明」，下一行加「👉 問問自己：___？」\n第7張：這些重點的共通點\n第8張：一句收尾金句\n第9張：✓ 三個重點整理＋「留言「___」，我私訊給你」\n\n規則：\n- 每張開頭寫「第N張」，第一行是標題、下面分行寫內文，張與張之間空一行\n- 重點字用「」框起來\n- 口語、像跟朋友聊天，不誇大\n- 不要出現「保證收益」「最便宜」這類違反保險廣告規範的字眼"], ["B｜故事型7張", "你是一位專門經營保險業務 IG 的內容策略師。我是梁仕翰，富邦人壽業務員，風格是專業、溫暖、不推銷，核心理念是「先解決客戶的問題，商品只是工具」。\n\n請把下面這個真實故事寫成 7 張 IG 輪播圖文案。\n故事概要：___\n\n結構：\n第1張：故事裡最戳心的一句話\n第2～4張：故事經過，每張一個轉折\n第5張：我從中學到什麼\n第6張：給讀者的提醒\n第7張：邀請留言或私訊\n\n每張內文 30 字內，不寫客戶真名。\n規則：\n- 每張開頭寫「第N張」，第一行是標題、下面分行寫內文，張與張之間空一行\n- 重點字用「」框起來\n- 口語、像跟朋友聊天，不誇大\n- 不要出現「保證收益」「最便宜」這類違反保險廣告規範的字眼"], ["C｜迷思破解型7張", "你是一位專門經營保險業務 IG 的內容策略師。我是梁仕翰，富邦人壽業務員，風格是專業、溫暖、不推銷，核心理念是「先解決客戶的問題，商品只是工具」。\n\n請寫一組 7 張「迷思破解」IG 輪播圖文案。\n主題：___\n\n結構：\n第1張：封面「關於___，很多人都誤會了」\n第2～6張：每張一個迷思，格式「你以為：___」換行「其實：___」\n第7張：總結＋行動呼籲\n\n規則：\n- 每張開頭寫「第N張」，第一行是標題、下面分行寫內文，張與張之間空一行\n- 重點字用「」框起來\n- 口語、像跟朋友聊天，不誇大\n- 不要出現「保證收益」「最便宜」這類違反保險廣告規範的字眼"], ["D｜清單收藏型7張", "你是一位專門經營保險業務 IG 的內容策略師。我是梁仕翰，富邦人壽業務員，風格是專業、溫暖、不推銷，核心理念是「先解決客戶的問題，商品只是工具」。\n\n請寫一組 7 張「值得收藏」的 IG 輪播圖文案。\n主題：___\n\n結構：\n第1張：封面「___的 5 個___，存起來」\n第2～6張：每張一個重點，一句標題＋一句說明\n第7張：提醒存起來＋「留言「___」」關鍵字\n\n每張不超過兩行。\n規則：\n- 每張開頭寫「第N張」，第一行是標題、下面分行寫內文，張與張之間空一行\n- 重點字用「」框起來\n- 口語、像跟朋友聊天，不誇大\n- 不要出現「保證收益」「最便宜」這類違反保險廣告規範的字眼"], ["E｜萬用修改句", "（貼在 ChatGPT 回覆後，依需要擇一使用）\n\n封面再更戳心一點，給我 5 個版本。\n\n改得更口語，像跟朋友聊天。\n\n每張字數砍一半，保留「第N張」格式。\n\n加入一個具體數字或案例，讓內容更有說服力。\n\n幫我檢查有沒有違反保險廣告規範的用語（例如保證收益、最便宜、穩賺），並提供修改建議。"]];
 $('#gpl').innerHTML=PROMPTS.map((p,k)=>`<div class="gp"><b>${p[0]}</b> <button data-k="${k}">📋 複製</button><pre>${esc(p[1])}</pre></div>`).join('');
 async function copyText(t){try{await navigator.clipboard.writeText(t);return true}catch(e){const a=document.createElement('textarea');a.value=t;a.style.position='fixed';a.style.opacity='0';document.body.appendChild(a);a.select();let ok=false;try{ok=document.execCommand('copy')}catch(_){}a.remove();return ok}}
