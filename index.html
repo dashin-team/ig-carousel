@@ -62,13 +62,37 @@ button.g{background:#333}.row{display:flex;gap:6px;flex-wrap:wrap;align-items:ce
 .list.lclose .t{font-size:88px;line-height:1.45;margin:0}
 .list .sl2{font-size:48px;line-height:2;margin-bottom:50px}.list .sl2 div:before{content:'✓ ';color:var(--sg);font-weight:900}
 .list .cta{border:4px solid var(--gd);padding:40px 46px;font-size:44px;line-height:1.6;text-align:center;color:var(--tx)}
+.list.milk,.list.bold{font-family:'Noto Sans TC','PingFang TC','Microsoft JhengHei','Noto Sans CJK TC',sans-serif}
+.milk .c{background:var(--card);border-radius:56px;padding:76px 70px;border:4px solid var(--cb)}
+.milk .qm{display:none}.milk .ltag{border:0;background:var(--cb);color:var(--tx);border-radius:999px;letter-spacing:4px;font-size:32px;padding:12px 34px}
+.milk .t{letter-spacing:1px;font-weight:900}.milk.lcover .t{font-size:92px}.milk .vbar{border:0;padding:0;font-size:44px}
+.milk .callout,.milk .qb,.milk .cta{border-radius:28px;border:0;background:var(--cb)}.milk .qb{color:var(--tx)}
+.milk .num{width:118px;min-width:118px;height:118px;border-radius:50%;background:var(--sg);color:#fff;font-size:54px;line-height:118px;font-weight:900}
+.milk .item{gap:34px;margin-bottom:48px}.milk .ih{font-size:52px}.milk .id{font-size:36px}.milk.lessay .t{border-bottom:0;background:var(--cb);border-radius:20px;padding:10px 26px}
+.milk .dv{height:10px;width:120px;border-radius:9px;background:var(--cb)}.milk.lclose .t{font-size:80px}.milk .sl2 div:before{content:'♡ ';color:var(--sg)}
+.edit{padding:150px 120px 170px}.edit .t{font-weight:700;letter-spacing:4px}.edit .qm{display:none}
+.edit .ltag{border:0;border-bottom:2px solid var(--sg);padding:0 0 14px;font-size:26px;letter-spacing:14px;font-weight:400}
+.edit.lcover .t{font-size:96px;line-height:1.35}.edit .vbar{border-left:2px solid var(--sg);padding-left:32px;font-size:40px}
+.edit .vbar,.edit .callout,.edit .id,.edit .es,.edit .sl2,.edit .cta{font-family:'Noto Sans TC','PingFang TC','Microsoft JhengHei',sans-serif;font-weight:300}
+.edit .lt{font-size:68px}.edit .callout{border:0;border-top:2px solid var(--sg);border-bottom:2px solid var(--sg);padding:46px 0;background:none;font-size:42px}
+.edit .num{font-size:110px;font-weight:300;min-width:130px;border-right:1px solid var(--tx2);padding-right:30px}
+.edit .item{gap:40px;margin-bottom:70px}.edit .ih{font-size:50px;font-weight:700}.edit .id{font-size:35px}.edit .qb{border:1px solid var(--sg);font-size:33px}
+.edit.lessay .t{font-size:66px;border-bottom:1px solid var(--sg)}.edit .es{font-size:42px}.edit .dv{height:1px;width:240px;background:var(--sg)}
+.edit.lclose .t{font-size:78px;font-weight:700}.edit .cta{border:1px solid var(--sg);font-size:40px}.edit .sl2{font-size:44px}
+.bold .t{font-weight:900;letter-spacing:0}.bold .qm{display:none}
+.bold .ltag{background:var(--sg);color:var(--bgc);border:0;font-weight:900;letter-spacing:6px;font-size:36px}
+.bold.lcover .t{font-size:150px;line-height:1.15}.bold .vbar{border-left:16px solid var(--sg);font-size:50px;font-weight:700}
+.bold .lt{font-size:100px}.bold .callout{border-width:6px;font-size:48px;font-weight:700}
+.bold .num{font-size:200px;letter-spacing:-8px}.bold .ih{font-size:64px}.bold .id{font-size:38px;font-weight:500}.bold .qb{border-width:5px;font-size:38px;font-weight:700}
+.bold.lessay .t{font-size:104px;border-bottom:10px solid var(--gd)}.bold .es{font-size:48px;font-weight:500}
+.bold.lclose .t{font-size:120px;line-height:1.3}.bold .dv{height:12px;width:200px}.bold .cta{border-width:6px;font-weight:900;font-size:46px}.bold .sl2{font-size:54px;font-weight:700}
 </style></head><body>
 <header><h1>📸 IG 輪播圖生成器</h1></header>
 <div class="wrap"><div class="panel">
 <label>貼上 AI 文案（空行或「1.」「第1張」「---」分隔；每段第一行為標題）</label>
 <textarea id="src"></textarea>
-<label>模板</label><select id="tpl"><option value="dark">暗黑模式（紅粉漸層）</option><option value="warm">溫暖淺色</option><option value="navy">海軍藍金（保險專業）</option><option value="mini">極簡白</option><option value="list">綠金清單（THE LIST）</option></select>
-<div id="schemeRow"><label>配色（綠金清單）</label><select id="scheme"><option value="0">灰綠配金</option><option value="1">深藍配金</option><option value="2">酒紅配米</option><option value="3">墨黑配橘</option><option value="4">咖啡配奶茶</option><option value="5">紫配粉</option><option value="6">奶茶溫馨（淺）</option><option value="7">簡約質感-白</option><option value="8">簡約質感-黑</option><option value="9">高對比-深藍金</option><option value="10">高對比-米紅</option><option value="11">高對比-鮮明遮罩</option><option value="c">自訂…</option></select>
+<label>模板</label><select id="tpl"><option value="dark">暗黑模式（紅粉漸層）</option><option value="warm">溫暖淺色</option><option value="navy">海軍藍金（保險專業）</option><option value="mini">極簡白</option><option value="list">綠金清單（THE LIST）</option><option value="milk">奶茶溫馨風</option><option value="edit">簡約質感風</option><option value="bold">高對比亮眼風</option></select>
+<div id="varRow" style="display:none"><label>樣式變化</label><select id="variant"></select></div><div id="schemeRow"><label>配色（綠金清單）</label><select id="scheme"><option value="0">灰綠配金</option><option value="1">深藍配金</option><option value="2">酒紅配米</option><option value="3">墨黑配橘</option><option value="4">咖啡配奶茶</option><option value="5">紫配粉</option><option value="6">奶茶溫馨（淺）</option><option value="7">簡約質感-白</option><option value="8">簡約質感-黑</option><option value="9">高對比-深藍金</option><option value="10">高對比-米紅</option><option value="11">高對比-鮮明遮罩</option><option value="c">自訂…</option></select>
 <div id="custom" class="row" style="display:none;font-size:13px;color:#bbb;margin-top:6px">主色 <input type="color" id="cAcc" value="#9BC59D"> 強調色 <input type="color" id="cHl" value="#D9B76A"></div></div>
 <label>頁尾帳號</label><input type="text" id="handle" value="梁仕翰｜富邦人壽">
 <label><input type="checkbox" id="pg" checked> 顯示頁碼</label>
@@ -153,6 +177,9 @@ const SCHEMES=[{ov:[24,34,30],a:'#9BC59D',h:'#D9B76A'},{ov:[14,24,48],a:'#9CC7F0
 {ov:[0,0,0],oa:.68,a:'#FFE600',h:'#3DFFB0',tx:'#FFFFFF',tx2:'#F0F0F0'}];
 function scheme(){const v=$('#scheme').value;if(v!=='c')return SCHEMES[+v];const a=$('#cAcc').value,n=parseInt(a.slice(1),16);
   return{ov:[(n>>16&255)*.16|0,(n>>8&255)*.16|0,(n&255)*.16|0],a,h:$('#cHl').value}}
+const STYLES={milk:{tag:'✿ 小筆記',v:[['奶茶',{ov:[250,244,232],oa:.86,a:'#B39A62',h:'#C48A12',tx:'#5A3E2B',tx2:'#6F5442',cb:'#FFF0B8',card:'rgba(255,253,246,.88)'}]]},
+ edit:{tag:'EDITORIAL',v:[['白底',{ov:[255,255,255],photo:'hide',a:'#1F5C3A',h:'#1F5C3A',tx:'#111111',tx2:'#666666'}],['黑底',{ov:[12,12,12],photo:'hide',a:'#5DA77B',h:'#7CC495',tx:'#FFFFFF',tx2:'#B5B5B5'}]]},
+ bold:{tag:'MUST READ',v:[['深藍底＋金字',{ov:[13,27,62],photo:'hide',a:'#F4C542',h:'#F4C542',tx:'#F4C542',tx2:'#F3EAD0'}],['米底＋亮紅',{ov:[244,234,214],photo:'hide',a:'#E3121B',h:'#E3121B',tx:'#E3121B',tx2:'#2B1D16'}],['照片＋鮮明遮罩',{ov:[0,0,0],oa:.66,a:'#FFE600',h:'#3DFFB0',tx:'#FFFFFF',tx2:'#F2F2F2'}]]}};
 const GRAY={},GP={};
 function ensureGray(u){if(GRAY[u])return Promise.resolve(GRAY[u]);if(GP[u])return GP[u];
   return GP[u]=new Promise(res=>{const im=new Image();im.onload=()=>{const c=document.createElement('canvas');c.width=im.naturalWidth;c.height=im.naturalHeight;
@@ -163,9 +190,9 @@ function hl(t){return esc(t).replace(/「([^」]+)」/g,'<span class="gd">「$1�
 function listKind(s,i,n){if(i===0)return'cover';if(/^[①-⑩]/m.test(s.b))return'items';if(i===n-1&&n>2)return'sum';if(i===1)return'intro';
   if(i===n-2&&!s.b.trim())return'close';return'essay'}
 function listHTML(s,i,n){
-  const sc=scheme(),k=listKind(s,i,n),u=sc.photo==='hide'?null:listImg(s,i),g=u?(GRAY[u]||(ensureGray(u).then(()=>{if($('#tpl').value==='list')render()}),null)):null;
+  const tp=$('#tpl').value,ST=STYLES[tp],sc=ST?ST.v[+$('#variant').value||0][1]:scheme(),k=listKind(s,i,n),u=sc.photo==='hide'?null:listImg(s,i),g=u?(GRAY[u]||(ensureGray(u).then(()=>{if(['list','milk','edit','bold'].includes($('#tpl').value))render()}),null)):null;
   let inner='';
-  if(k==='cover')inner=`<div class="ltag">THE LIST</div><div class="qm">“</div><div class="t" contenteditable data-k="t">${hl(s.t)}</div><div class="vbar" contenteditable data-k="b">${esc(s.b)}</div>`;
+  if(k==='cover')inner=`<div class="ltag">${ST?ST.tag:'THE LIST'}</div><div class="qm">“</div><div class="t" contenteditable data-k="t">${hl(s.t)}</div><div class="vbar" contenteditable data-k="b">${esc(s.b)}</div>`;
   else if(k==='intro')inner=`<div class="t lt" contenteditable data-k="t">${hl(s.t)}</div><div class="callout" contenteditable data-k="b">${esc(s.b)}</div>`;
   else if(k==='items'){const its=[];for(const L of s.b.split('\n')){const l=L.trim();if(!l)continue;
       if(/^[①-⑩]/.test(l)){const m=l.slice(1).trim().split(/[：:]/);its.push({no:l[0].charCodeAt(0)-9311,h:m[0],d:m.slice(1).join('：'),q:''})}
@@ -175,7 +202,7 @@ function listHTML(s,i,n){
   else if(k==='sum'){const ls=s.b.split('\n').map(x=>x.trim()).filter(Boolean),cta=ls.filter(x=>/留言|私訊|追蹤|分享/.test(x)),pts=ls.filter(x=>!cta.includes(x)).join(' ').split(/[✔✓]/).map(x=>x.trim()).filter(Boolean);
     inner=`<div class="t lt" contenteditable data-k="t">${hl(s.t)}</div><div class="sl2">${pts.map(p=>`<div>${hl(p)}</div>`).join('')}</div>${cta.length?`<div class="cta">${cta.map(hl).join('<br>')}</div>`:''}`}
   else inner=`<div class="t" contenteditable data-k="t">${hl(s.t)}</div><div class="es" contenteditable data-k="b">${hl(s.b)}</div>`;
-  return `<div class="slide list l${k}" style="--sg:${sc.a};--gd:${sc.h};${sc.tx?`--tx:${sc.tx};--tx2:${sc.tx2};`:''}${sc.cb?`--cb:${sc.cb};`:''}background:rgb(${sc.ov.map(x=>Math.min(255,x+8))})">${g?`<div class="bg" style="background-image:url('${g}')"></div><div class="ov" style="background:rgba(${sc.ov},${sc.oa??Math.min(.92,s.dark+.25)})"></div>`:''}<div class="c">${inner}</div>
+  return `<div class="slide list ${ST?tp:''} l${k}" style="--bgc:rgb(${sc.ov});${sc.card?`--card:${sc.card};`:''}--sg:${sc.a};--gd:${sc.h};${sc.tx?`--tx:${sc.tx};--tx2:${sc.tx2};`:''}${sc.cb?`--cb:${sc.cb};`:''}background:rgb(${sc.ov.map(x=>Math.min(255,x+8))})">${g?`<div class="bg" style="background-image:url('${g}')"></div><div class="ov" style="background:rgba(${sc.ov},${sc.oa??Math.min(.92,s.dark+.25)})"></div>`:''}<div class="c">${inner}</div>
   <div class="ft"><span>${esc($('#handle').value)}</span><span>${$('#pg').checked?String(i+1).padStart(2,'0')+' / '+String(n).padStart(2,'0'):''}</span></div></div>`}
 const SAMPLE_LIST=`第1張 業務講得天花亂墜，我到底該信誰？
 買保險前，先問這八個問題，答案會幫你篩掉不適合的人
@@ -242,7 +269,7 @@ function parse(txt){
 }
 function esc(s){return s.replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]))}
 function slideHTML(s,i,n){
-  if($('#tpl').value==='list')return listHTML(s,i,n);
+  if(['list','milk','edit','bold'].includes($('#tpl').value))return listHTML(s,i,n);
   const tp=$('#tpl').value,kind=i===0?'cover':(i===n-1&&n>1?'cta':'');
   return `<div class="slide ${tp} ${kind} ${s.img?'has-bg':''}">${s.img?`<div class="bg" style="background-image:url('${s.img}')"></div><div class="ov" style="background:rgba(0,0,0,${s.dark})"></div>`:''}
   <div class="c">${kind==='cover'?'<div class="tag">SWIPE ➜</div>':''}<div class="t" contenteditable data-k="t">${esc(s.t)}</div><div class="b" contenteditable data-k="b">${esc(s.b)}</div></div>
@@ -273,7 +300,7 @@ function setImg(i,file){const r=new FileReader();r.onload=()=>{slides[i].img=r.r
 function lerp(a,b,t){return Math.round(a+(b-a)*t)}
 async function snap(i){
   if(document.fonts)await document.fonts.ready;
-  if($('#tpl').value==='list'){const u=listImg(slides[i],i);if(u)await ensureGray(u)}
+  if(['list','milk','edit','bold'].includes($('#tpl').value)){const u=listImg(slides[i],i);if(u)await ensureGray(u)}
   const box=$('#exp');box.innerHTML=slideHTML(slides[i],i,slides.length);
   const el=box.firstElementChild;
   if(el.classList.contains('dark')){ // html2canvas 不支援 background-clip:text → 逐字漸層
@@ -287,9 +314,12 @@ const toBlob=c=>new Promise(r=>c.toBlob(r,'image/png'));
 function dlBlob(b,name){const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=name;document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},1500)}
 const msg=t=>$('#msg').textContent=t;
 $('#gen').onclick=()=>{slides=parse($('#src').value);render();msg(`已生成 ${slides.length} 張`)};
-['tpl','handle','pg','scheme','cAcc','cHl'].forEach(id=>$('#'+id).addEventListener('change',render));
+['tpl','scheme'].forEach(id=>$('#'+id).addEventListener('change',syncScheme));
+['tpl','handle','pg','scheme','cAcc','cHl','variant'].forEach(id=>$('#'+id).addEventListener('change',render));
 ['cAcc','cHl'].forEach(id=>$('#'+id).addEventListener('input',render));
-function syncScheme(){$('#schemeRow').style.display=$('#tpl').value==='list'?'':'none';$('#custom').style.display=$('#scheme').value==='c'?'flex':'none'}
+function syncScheme(){const st=STYLES[$('#tpl').value];$('#varRow').style.display=st&&st.v.length>1?'':'none';
+  if(st){const cur=$('#variant').dataset.tp===$('#tpl').value?$('#variant').value:'0';$('#variant').innerHTML=st.v.map((x,k)=>`<option value="${k}">${x[0]}</option>`).join('');$('#variant').value=cur;$('#variant').dataset.tp=$('#tpl').value}
+  $('#schemeRow').style.display=$('#tpl').value==='list'?'':'none';$('#custom').style.display=$('#scheme').value==='c'?'flex':'none'}
 ['tpl','scheme'].forEach(id=>$('#'+id).addEventListener('change',syncScheme));
 $('#zip').onclick=async()=>{if(!slides.length)return;const z=new JSZip();
   for(let i=0;i<slides.length;i++){msg(`輸出中 ${i+1}/${slides.length}…`);z.file(`slide-${String(i+1).padStart(2,'0')}.png`,await toBlob(await snap(i)))}
