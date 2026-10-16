@@ -47,7 +47,7 @@ button.g{background:#333}.row{display:flex;gap:6px;flex-wrap:wrap;align-items:ce
 <label>模板</label><select id="tpl"><option value="dark">暗黑模式（紅粉漸層）</option><option value="warm">溫暖淺色</option><option value="navy">海軍藍金（保險專業）</option><option value="mini">極簡白</option></select>
 <label>頁尾帳號</label><input type="text" id="handle" value="梁仕翰｜富邦人壽">
 <label><input type="checkbox" id="pg" checked> 顯示頁碼</label>
-<div class="row"><button id="gen">✨ 生成輪播圖</button><button class="g" id="igbtn">📱 IG預覽</button><button class="g" id="zip">⬇ 全部下載 ZIP</button></div>
+<div class="row"><button id="gen">✨ 生成輪播圖</button><button class="g" id="igbtn">📱 IG預覽</button><button class="g" id="zip">⬇ 全部下載 ZIP</button><button class="g" id="ldtpl">📝 載入文字範本</button></div>
 <div id="msg"></div>
 <p style="font-size:12px;color:#888">提示：點投影片文字可直接編輯；可拖曳圖片到投影片當背景。</p>
 </div><div class="out"><div class="grid" id="grid"></div></div></div>
@@ -203,5 +203,7 @@ $('#gg').innerHTML=GALLERY.map((g,k)=>`<div data-k="${k}"><img src="${g.u}" alt=
 $('#gg').onclick=e=>{const d=e.target.closest('[data-k]');if(!d)return;const u=GALLERY[d.dataset.k].u;
   if($('#galall').checked)slides.forEach(x=>x.img=u);else slides[galTarget].img=u;$('#gal').style.display='none';render()};
 $('#galclose').onclick=()=>$('#gal').style.display='none';
+const TPL9="第1張 「___，我是不是也這樣？」\n其實很多人都卡在___，這篇幫你一次看懂\n\n第2張 這篇怎麼用？\n先往下滑，找到最像你的那一項\n對照問題框誠實回答，存起來慢慢看\n\n第3張 ① ___ ／ ② ___\n① ___：一句話說明___\n👉 問問自己：___？\n② ___：一句話說明___\n👉 問問自己：___？\n\n第4張 ③ ___ ／ ④ ___\n③ ___：一句話說明___\n👉 問問自己：___？\n④ ___：一句話說明___\n👉 問問自己：___？\n\n第5張 ⑤ ___ ／ ⑥ ___\n⑤ ___：一句話說明___\n👉 問問自己：___？\n⑥ ___：一句話說明___\n👉 問問自己：___？\n\n第6張 ⑦ ___ ／ ⑧ ___\n⑦ ___：一句話說明___\n👉 問問自己：___？\n⑧ ___：一句話說明___\n👉 問問自己：___？\n\n第7張 這8點的共通點是？\n它們其實都指向同一件事：___\n差別只在於___\n\n第8張 ___，比___更重要。\n\n第9張 重點整理\n✔ ___　✔ ___　✔ ___\n想要___？留言「___」，我私訊給你 👇";
+$('#ldtpl').onclick=()=>{if($('#src').value.trim()&&$('#src').value!==SAMPLE&&!confirm('要用 9 張填空範本取代目前文字嗎？'))return;$('#src').value=TPL9;$('#gen').click();msg('已載入 9 張填空範本：把 ___ 換成你的內容後再按生成')};
 $('#src').value=SAMPLE;$('#gen').click();
 </script></body></html>
