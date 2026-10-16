@@ -244,25 +244,49 @@ const SAMPLE_LIST=`第1張 業務講得天花亂墜，我到底該信誰？
 ✔ 算清保額、繳費年期與解約金
 想要這八題的檢核表？留言「八問」，我私訊給你 👇`;
 
-function parse(txt){
-  txt=txt.replace(/\r/g,'').trim();if(!txt)return[];
-  const mk=/^\s*(?:第\s*\d+\s*[張页頁]|\d+\s*[.、．)]|-{3,}|slide\s*\d+)\s*[:：]?\s*/i;
-  let blocks=[],cur=[];
-  for(const line of txt.split('\n')){
-    if(!line.trim()){if(cur.length){blocks.push(cur);cur=[]}continue}
-    if(mk.test(line)){if(cur.length)blocks.push(cur);cur=[];const r=line.replace(mk,'').trim();if(r)cur.push(r);continue}
-    cur.push(line.trim());
+function parse(raw){
+  const CN={'一':1,'二':2,'兩':2,'三':3,'四':4,'五':5,'六':6,'七':7,'八':8,'九':9,'十':10};
+  const cn=s=>{if(/^\d+$/.test(s))return+s;if(s.length===1)return CN[s];if(s[0]==='十')return 10+(CN[s[1]]||0);return CN[s[0]]*10+(CN[s[2]||s[1]]||0)};
+  const CHAT=/^(以下是|下面是|好的|當然|沒問題|以下為|希望|需要我|如果你|如果需要|要不要|可以再|我可以|祝你|有任何|歡迎再|是否需要|若需要)|有幫助|幫你調整|嗎[？?]\s*$/;
+  const HASH=/^(#[^\s#]+\s*)+$/;
+  let lines=raw.replace(/\r/g,'').replace(/[０-９]/g,c=>String.fromCharCode(c.charCodeAt(0)-65248)).split('\n').map(l=>{
+    let t=l.replace(/\*\*|__|`/g,'').trim();
+    if(/^#+\s*第/.test(t)||/^#{1,6}\s/.test(t))t=t.replace(/^#+\s*/,'');
+    if(/^[-*_—=]{3,}$/.test(t))t='';
+    t=t.replace(/^[-*]\s+/,'• ');return t});
+  const STRONG=/^[【\[(（]?\s*(?:第\s*([0-9]+|[一二兩三四五六七八九十]+)\s*[張张頁页]|slide\s*([0-9]+)|page\s*([0-9]+))\s*[】\])）]?\s*[:：.、\-–—|｜]?\s*(.*)$/i;
+  const NUM=/^([0-9]{1,2})\s*[.、．)）]\s*(.*)$/;
+  let marks=[];lines.forEach((l,i)=>{const m=l.match(STRONG);if(m)marks.push({i,n:cn(m[1]||m[2]||m[3]),rest:m[4]})});
+  if(marks.length<2){ // numbered "1." markers: must run 1,2,3… sequentially
+    let exp=1,c=[];lines.forEach((l,i)=>{const m=l.match(NUM);if(m&&+m[1]===exp){c.push({i,n:exp,rest:m[2]});exp++}});
+    marks=c.length>=3?c:[];
   }
-  if(cur.length)blocks.push(cur);
-  blocks=blocks.filter(b=>b.length);
-  if(blocks.length===1){
-    const s=blocks[0].join('').match(/[^。！？!?；;]+[。！？!?；;]?/g)||[];
-    if(s.length<=2){blocks=[[s[0]||'',s.slice(1).join('')]];}
-    else{const chunks=[[s[0].replace(/[。！？!?]$/,''),'']];const rest=s.slice(1),k=Math.max(1,Math.ceil(rest.length/6));
-      for(let i=0;i<rest.length;i+=k){const g=rest.slice(i,i+k);chunks.push([g[0].replace(/[。；;]$/,''),g.slice(1).join('\n')])}
-      blocks=chunks;}
+  const clean=arr=>arr.filter(l=>l&&!HASH.test(l));
+  const toSlide=arr=>{let t='',b=[];arr=arr.map(l=>l.replace(/^[（(][^）)]{1,8}[）)]\s*[:：]?\s*/,''));
+    for(const l of arr){if(!l)continue;const m=l.match(/^(標題|主標|主標題|title)\s*[:：]\s*(.*)$/i),m2=l.match(/^(副標|副標題|內文|內容|說明|正文|文案|body)\s*[:：]\s*(.*)$/i);
+      if(m){if(t)b.unshift(t);t=m[2]}else if(m2){if(m2[2])b.push(m2[2])}else if(!t)t=l;else b.push(l)}
+    return{t,b:b.join('\n'),img:null,dark:.55}};
+  let blocks=[];
+  if(marks.length){
+    marks.forEach((m,k)=>{const end=k+1<marks.length?marks[k+1].i:lines.length;blocks.push(clean([m.rest,...lines.slice(m.i+1,end)]))});
+    let last=blocks[blocks.length-1]; // trim GPT chatter after last slide
+    while(last.length>1&&CHAT.test(last[last.length-1]))last.pop();
+  }else{
+    let cur=[];for(const l of lines){if(!l){if(cur.length){blocks.push(cur);cur=[]}}else cur.push(l)}if(cur.length)blocks.push(cur);
+    blocks=blocks.map(clean).filter(b=>b.length);
+    while(blocks.length>1&&blocks[0].length<=2&&(CHAT.test(blocks[0][0])||/[:：]$/.test(blocks[0][blocks[0].length-1])))blocks.shift();
+    while(blocks.length>1&&blocks[blocks.length-1].every(l=>CHAT.test(l)))blocks.pop();
+    if(blocks.length>10){const mid=blocks.slice(1,-1),g=7,out=[blocks[0]];
+      for(let q=0;q<g;q++){const part=mid.slice(Math.floor(q*mid.length/g),Math.floor((q+1)*mid.length/g));if(part.length)out.push(part.flat())}
+      out.push(blocks[blocks.length-1]);blocks=out}
+    if(blocks.length===1){
+      const s=blocks[0].join('').match(/[^。！？!?；;]+[。！？!?；;]?/g)||[];
+      if(s.length<=2)blocks=[[s[0]||'',s.slice(1).join('')]];
+      else{const ch=[[s[0].replace(/[。！？!?]$/,'')]],rest=s.slice(1),m=Math.min(6,rest.length);
+        for(let q=0;q<m;q++){const g2=rest.slice(Math.floor(q*rest.length/m),Math.floor((q+1)*rest.length/m));ch.push([g2[0].replace(/[。；;]$/,''),...g2.slice(1)])}
+        blocks=ch}}
   }
-  return blocks.map(b=>({t:b[0],b:b.slice(1).join('\n'),img:null,dark:.55}));
+  return blocks.filter(b=>b.length).map(toSlide).filter(s=>s.t||s.b);
 }
 function esc(s){return s.replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]))}
 function slideHTML(s,i,n){
@@ -310,7 +334,7 @@ async function snap(i){
 const toBlob=c=>new Promise(r=>c.toBlob(r,'image/png'));
 function dlBlob(b,name){const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=name;document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},1500)}
 const msg=t=>$('#msg').textContent=t;
-$('#gen').onclick=()=>{slides=parse($('#src').value);render();msg(`已生成 ${slides.length} 張`)};
+$('#gen').onclick=()=>{slides=parse($('#src').value);render();msg(`偵測到 ${slides.length} 張`)};
 ['tpl','scheme'].forEach(id=>$('#'+id).addEventListener('change',syncScheme));
 ['tpl','handle','pg','scheme','cAcc','cHl','variant'].forEach(id=>$('#'+id).addEventListener('change',render));
 ['cAcc','cHl'].forEach(id=>$('#'+id).addEventListener('input',render));
@@ -340,7 +364,7 @@ const TPL9="第1張 「___，我是不是也這樣？」\n其實很多人都卡�
 $('#ldtpl').onclick=()=>{if($('#src').value.trim()&&$('#src').value!==SAMPLE&&!confirm('要用 9 張填空範本取代目前文字嗎？'))return;$('#src').value=TPL9;$('#gen').click();msg('已載入 9 張填空範本：把 ___ 換成你的內容後再按生成')};
 $('#ldlist').onclick=()=>{$('#src').value=SAMPLE_LIST;if(!STYLES[$('#tpl').value])$('#tpl').value='milk';syncScheme();$('#gen').click();msg('已載入範例：買保險前先問八個問題')};
 $('#fs').oninput=()=>{document.documentElement.style.setProperty('--fs',$('#fs').value);$('#fsv').textContent=Math.round($('#fs').value*100)+'%'};
-const PROMPTS=[["A｜9張清單型", "你是一位專門經營保險業務 IG 的內容策略師。我是___（你的名字與公司），風格是___（例如：專業、溫暖、不推銷）。\n\n請幫我寫一組 9 張的 IG 輪播圖文案。\n受眾：___\n目的：___\n主題：___\n\n結構：\n第1張：封面，戳心標題（15字內）＋一句副標\n第2張：告訴讀者這篇怎麼用\n第3～6張：每張兩個重點，用①②…⑧編號，格式「① 重點：一句說明」，下一行加「👉 問問自己：___？」\n第7張：這些重點的共通點\n第8張：一句收尾金句\n第9張：✓ 三個重點整理＋「留言「___」，我私訊給你」\n\n規則：\n- 每張開頭寫「第N張」，第一行是標題、下面分行寫內文，張與張之間空一行\n- 重點字用「」框起來\n- 口語、像跟朋友聊天，不誇大\n- 不要出現「保證收益」「最便宜」這類違反保險廣告規範的字眼"], ["B｜故事型7張", "你是一位專門經營保險業務 IG 的內容策略師。我是___（你的名字與公司），風格是___（例如：專業、溫暖、不推銷）。\n\n請把下面這個真實故事寫成 7 張 IG 輪播圖文案。\n故事概要：___\n\n結構：\n第1張：故事裡最戳心的一句話\n第2～4張：故事經過，每張一個轉折\n第5張：我從中學到什麼\n第6張：給讀者的提醒\n第7張：邀請留言或私訊\n\n每張內文 30 字內，不寫客戶真名。\n規則：\n- 每張開頭寫「第N張」，第一行是標題、下面分行寫內文，張與張之間空一行\n- 重點字用「」框起來\n- 口語、像跟朋友聊天，不誇大\n- 不要出現「保證收益」「最便宜」這類違反保險廣告規範的字眼"], ["C｜迷思破解型7張", "你是一位專門經營保險業務 IG 的內容策略師。我是___（你的名字與公司），風格是___（例如：專業、溫暖、不推銷）。\n\n請寫一組 7 張「迷思破解」IG 輪播圖文案。\n主題：___\n\n結構：\n第1張：封面「關於___，很多人都誤會了」\n第2～6張：每張一個迷思，格式「你以為：___」換行「其實：___」\n第7張：總結＋行動呼籲\n\n規則：\n- 每張開頭寫「第N張」，第一行是標題、下面分行寫內文，張與張之間空一行\n- 重點字用「」框起來\n- 口語、像跟朋友聊天，不誇大\n- 不要出現「保證收益」「最便宜」這類違反保險廣告規範的字眼"], ["D｜清單收藏型7張", "你是一位專門經營保險業務 IG 的內容策略師。我是___（你的名字與公司），風格是___（例如：專業、溫暖、不推銷）。\n\n請寫一組 7 張「值得收藏」的 IG 輪播圖文案。\n主題：___\n\n結構：\n第1張：封面「___的 5 個___，存起來」\n第2～6張：每張一個重點，一句標題＋一句說明\n第7張：提醒存起來＋「留言「___」」關鍵字\n\n每張不超過兩行。\n規則：\n- 每張開頭寫「第N張」，第一行是標題、下面分行寫內文，張與張之間空一行\n- 重點字用「」框起來\n- 口語、像跟朋友聊天，不誇大\n- 不要出現「保證收益」「最便宜」這類違反保險廣告規範的字眼"], ["E｜萬用修改句", "（貼在 ChatGPT 回覆後，依需要擇一使用）\n\n封面再更戳心一點，給我 5 個版本。\n\n改得更口語，像跟朋友聊天。\n\n每張字數砍一半，保留「第N張」格式。\n\n加入一個具體數字或案例，讓內容更有說服力。\n\n幫我檢查有沒有違反保險廣告規範的用語（例如保證收益、最便宜、穩賺），並提供修改建議。"]];
+const PROMPTS=[["A｜9張清單型", "你是一位專門經營保險業務 IG 的內容策略師。我是___（你的名字與公司），風格是___（例如：專業、溫暖、不推銷）。\n\n請幫我寫一組 9 張的 IG 輪播圖文案。\n受眾：___\n目的：___\n主題：___\n\n結構：\n第1張：封面，戳心標題（15字內）＋一句副標\n第2張：告訴讀者這篇怎麼用\n第3～6張：每張兩個重點，用①②…⑧編號，格式「① 重點：一句說明」，下一行加「👉 問問自己：___？」\n第7張：這些重點的共通點\n第8張：一句收尾金句\n第9張：✓ 三個重點整理＋「留言「___」，我私訊給你」\n\n規則：\n- 每張開頭寫「第N張」，第一行是標題、下面分行寫內文，張與張之間空一行\n- 重點字用「」框起來\n- 口語、像跟朋友聊天，不誇大\n- 不要出現「保證收益」「最便宜」這類違反保險廣告規範的字眼\n- 每張只能用『第N張』開頭，同一張內不要空行，不要加粗體符號、標題或任何額外說明。"], ["B｜故事型7張", "你是一位專門經營保險業務 IG 的內容策略師。我是___（你的名字與公司），風格是___（例如：專業、溫暖、不推銷）。\n\n請把下面這個真實故事寫成 7 張 IG 輪播圖文案。\n故事概要：___\n\n結構：\n第1張：故事裡最戳心的一句話\n第2～4張：故事經過，每張一個轉折\n第5張：我從中學到什麼\n第6張：給讀者的提醒\n第7張：邀請留言或私訊\n\n每張內文 30 字內，不寫客戶真名。\n規則：\n- 每張開頭寫「第N張」，第一行是標題、下面分行寫內文，張與張之間空一行\n- 重點字用「」框起來\n- 口語、像跟朋友聊天，不誇大\n- 不要出現「保證收益」「最便宜」這類違反保險廣告規範的字眼\n- 每張只能用『第N張』開頭，同一張內不要空行，不要加粗體符號、標題或任何額外說明。"], ["C｜迷思破解型7張", "你是一位專門經營保險業務 IG 的內容策略師。我是___（你的名字與公司），風格是___（例如：專業、溫暖、不推銷）。\n\n請寫一組 7 張「迷思破解」IG 輪播圖文案。\n主題：___\n\n結構：\n第1張：封面「關於___，很多人都誤會了」\n第2～6張：每張一個迷思，格式「你以為：___」換行「其實：___」\n第7張：總結＋行動呼籲\n\n規則：\n- 每張開頭寫「第N張」，第一行是標題、下面分行寫內文，張與張之間空一行\n- 重點字用「」框起來\n- 口語、像跟朋友聊天，不誇大\n- 不要出現「保證收益」「最便宜」這類違反保險廣告規範的字眼\n- 每張只能用『第N張』開頭，同一張內不要空行，不要加粗體符號、標題或任何額外說明。"], ["D｜清單收藏型7張", "你是一位專門經營保險業務 IG 的內容策略師。我是___（你的名字與公司），風格是___（例如：專業、溫暖、不推銷）。\n\n請寫一組 7 張「值得收藏」的 IG 輪播圖文案。\n主題：___\n\n結構：\n第1張：封面「___的 5 個___，存起來」\n第2～6張：每張一個重點，一句標題＋一句說明\n第7張：提醒存起來＋「留言「___」」關鍵字\n\n每張不超過兩行。\n規則：\n- 每張開頭寫「第N張」，第一行是標題、下面分行寫內文，張與張之間空一行\n- 重點字用「」框起來\n- 口語、像跟朋友聊天，不誇大\n- 不要出現「保證收益」「最便宜」這類違反保險廣告規範的字眼\n- 每張只能用『第N張』開頭，同一張內不要空行，不要加粗體符號、標題或任何額外說明。"], ["E｜萬用修改句", "（貼在 ChatGPT 回覆後，依需要擇一使用）\n\n封面再更戳心一點，給我 5 個版本。\n\n改得更口語，像跟朋友聊天。\n\n每張字數砍一半，保留「第N張」格式。\n\n加入一個具體數字或案例，讓內容更有說服力。\n\n幫我檢查有沒有違反保險廣告規範的用語（例如保證收益、最便宜、穩賺），並提供修改建議。\n\n每張只能用『第N張』開頭，同一張內不要空行，不要加粗體符號、標題或任何額外說明。"]];
 $('#gpl').innerHTML=PROMPTS.map((p,k)=>`<div class="gp"><b>${p[0]}</b> <button data-k="${k}">📋 複製</button><pre>${esc(p[1])}</pre></div>`).join('');
 async function copyText(t){try{await navigator.clipboard.writeText(t);return true}catch(e){const a=document.createElement('textarea');a.value=t;a.style.position='fixed';a.style.opacity='0';document.body.appendChild(a);a.select();let ok=false;try{ok=document.execCommand('copy')}catch(_){}a.remove();return ok}}
 $('#gpl').onclick=async e=>{const b=e.target.closest('button[data-k]');if(!b)return;const ok=await copyText(PROMPTS[b.dataset.k][1]);b.textContent=ok?'✅ 已複製':'請手動選取複製';setTimeout(()=>b.textContent='📋 複製',1800)};
